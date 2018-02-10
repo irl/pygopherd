@@ -73,7 +73,7 @@ def initmimetypes(config):
 
 class GopherRequestHandler(socketserver.StreamRequestHandler):
     def handle(self):
-        request = self.rfile.readline()
+        request = self.rfile.readline().decode('ascii')
 
         protohandler = \
                      ProtocolMultiplexer.getProtocol(request, \

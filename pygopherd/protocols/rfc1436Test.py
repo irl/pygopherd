@@ -1,13 +1,13 @@
 import unittest, re
 from pygopherd.protocols.rfc1436 import GopherProtocol
 from pygopherd import testutil
-from io import StringIO
+from io import BytesIO
 
 class RFC1436TestCase(unittest.TestCase):
     def setUp(self):
         self.config = testutil.getconfig()
-        self.rfile = StringIO("/testfile.txt\n")
-        self.wfile = StringIO()
+        self.rfile = BytesIO(b"/testfile.txt\n")
+        self.wfile = BytesIO()
         self.logfile = testutil.getstringlogger()
         self.handler = testutil.gettestinghandler(self.rfile, self.wfile,
                                                   self.config)

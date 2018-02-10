@@ -1,14 +1,14 @@
 import unittest
 import pygopherd.handlers.file
 from pygopherd import testutil
-from io import StringIO
+from io import BytesIO
 from pygopherd.protocols.base import BaseGopherProtocol
 
 class BaseProtocolTestCase(unittest.TestCase):
     def setUp(self):
         self.config = testutil.getconfig()
-        self.rfile = StringIO("/testfile.txt\n")
-        self.wfile = StringIO()
+        self.rfile = BytesIO(b"/testfile.txt\n")
+        self.wfile = BytesIO()
         self.logfile = testutil.getstringlogger()
         self.logstr =  "10.77.77.77 [BaseGopherProtocol/FileHandler]: /testfile.txt\n"
         self.handler = testutil.gettestinghandler(self.rfile, self.wfile,

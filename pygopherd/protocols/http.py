@@ -39,7 +39,7 @@ class HTTPProtocol(BaseGopherProtocol):
         # Slurp up remaining lines.
         self.httpheaders = {}
         while 1:
-            line = self.rfile.readline()
+            line = self.rfile.readline().decode('ascii')
             if not len(line):
                 break
             line = line.strip()
@@ -186,14 +186,15 @@ class HTTPProtocol(BaseGopherProtocol):
         return retstr + "\n</BODY></HTML>\n"
 
     def filenotfound(self, msg):
-        self.wfile.write("HTTP/1.0 404 Not Found\r\n")
-        self.wfile.write("Content-Type: text/html\r\n\r\n")
-        self.wfile.write('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">')
-        self.wfile.write("""\n<HTML><HEAD><TITLE>Selector Not Found</TITLE>
+        response = ("HTTP/1.0 404 Not Found\r\n"
+        "Content-Type: text/html\r\n\r\n"
+        """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+        <HTML><HEAD><TITLE>Selector Not Found</TITLE>
         <H1>Selector Not Found</H1>
         <TT>""")
-        self.wfile.write(cgi.escape(msg))
-        self.wfile.write("</TT><HR>Pygopherd</BODY></HTML>\n")
+        response += cgi.escape(msg)
+        response += "</TT><HR>Pygopherd</BODY></HTML>\n"
+        self.wfile.write(response.encode('ascii'))
 
     def getimgtag(self, entry):
         name = 'generic.gif'

@@ -56,9 +56,9 @@ class BaseGopherProtocol:
         """Normalize slashes in the selector.  Make sure it starts
         with a slash and does not end with one.  If it is a root directory
         request, make sure it is exactly '/'.  Returns result."""
-        if len(selector) and selector[-1] == '/':
+        if len(selector) and selector[-1] == b'/':
             selector = selector[0:-1]
-        if len(selector) == 0 or selector[0] != '/':
+        if len(selector) == 0 or selector[0] != b'/':
             selector = '/' + selector
         return selector
 
@@ -94,7 +94,7 @@ class BaseGopherProtocol:
             self.filenotfound(e[1])
 
     def filenotfound(self, msg):
-        self.wfile.write("3%s\t\terror.host\t1\r\n" % msg)
+        self.wfile.write(("3%s\t\terror.host\t1\r\n" % msg).encode('utf-8'))
 
     def gethandler(self):
         """Gets the handler for this object's selector."""

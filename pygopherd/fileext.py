@@ -20,6 +20,25 @@ import mimetypes
 
 typemap = {}
 
+def cmp_to_key(mycmp):
+    'Convert a cmp= function into a key= function'
+    class K(object):
+        def __init__(self, obj, *args):
+            self.obj = obj
+        def __lt__(self, other):
+            return mycmp(self.obj, other.obj) < 0
+        def __gt__(self, other):
+            return mycmp(self.obj, other.obj) > 0
+        def __eq__(self, other):
+            return mycmp(self.obj, other.obj) == 0
+        def __le__(self, other):
+            return mycmp(self.obj, other.obj) <= 0  
+        def __ge__(self, other):
+            return mycmp(self.obj, other.obj) >= 0
+        def __ne__(self, other):
+            return mycmp(self.obj, other.obj) != 0
+    return K
+
 def extcmp(x, y):
     if x.count('.') > y.count('.'):
         return 1
@@ -29,7 +48,7 @@ def extcmp(x, y):
         return 1
     if len(x) < len(y):
         return -1
-    return cmp(x, y)
+    return (x>y)-(x<y)
 
 def extstrip(file, filetype):
     """Strips off the extension from file given type and returns the result.
@@ -43,9 +62,9 @@ def extstrip(file, filetype):
     return file
 
 def init():
-    for fileext, filetype in mimetypes.types_map.items():
+    for fileext, filetype in list(mimetypes.types_map.items()):
         extlist = []
-        if typemap.has_key(filetype):
+        if filetype in typemap:
             extlist = typemap[filetype]
 
         baselist = []
@@ -53,14 +72,14 @@ def init():
         baselist.append(fileext)
         # Add it in all encoding flavors.
         baselist.extend(
-            [fileext + enc for enc in mimetypes.encodings_map.keys()])
+            [fileext + enc for enc in list(mimetypes.encodings_map.keys())])
 
-        for shortsuff, longsuff in mimetypes.suffix_map.items():
+        for shortsuff, longsuff in list(mimetypes.suffix_map.items()):
             if longsuff in baselist:
                 baselist.append(shortsuff)
 
         extlist.extend(baselist)
-        extlist.sort(extcmp)
+        extlist.sort(key=cmp_to_key(extcmp))
         extlist.reverse()
         typemap[filetype] = extlist
 
