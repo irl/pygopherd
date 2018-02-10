@@ -18,7 +18,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from .http import HTTPProtocol
-from io import StringIO
+from io import BytesIO
 import cgi, re
 
 accesskeys = '1234567890#*'
@@ -131,22 +131,22 @@ class WAPProtocol(HTTPProtocol):
         if not self.needsconversion:
             self.handler.write(wfile)
             return
-        fakefile = StringIO()
+        fakefile = BytesIO()
         self.handler.write(fakefile)
         fakefile.seek(0)
-        wfile.write(wmlheader)
-        wfile.write('<card id="index" title="Text File" newcontext="true">\n')
-        wfile.write('<p>\n')
+        wfile.write(wmlheader.encode('ascii'))
+        wfile.write(b'<card id="index" title="Text File" newcontext="true">\n')
+        wfile.write(b'<p>\n')
         while 1:
             line = fakefile.readline()
             if not len(line):
                 break
             line = line.rstrip()
             if len(line):
-                wfile.write(cgi.escape(line) + "\n")
+                wfile.write(cgi.escape(line.decode('ascii')).encode('ascii') + b"\n")
             else:
-                wfile.write("</p>\n<p>")
-        wfile.write('</p>\n</card>\n</wml>\n')
+                wfile.write(b"</p>\n<p>")
+        wfile.write(b'</p>\n</card>\n</wml>\n')
         
     def filenotfound(self, msg):
         wfile = self.wfile
