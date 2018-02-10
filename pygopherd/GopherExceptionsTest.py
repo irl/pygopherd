@@ -20,14 +20,14 @@
 # END OF COPYRIGHT #
 
 import unittest
-from io import StringIO
+from io import BytesIO
 from pygopherd import logger, initialization, GopherExceptions, testutil
 from pygopherd.GopherExceptions import FileNotFound
 from pygopherd.protocols import rfc1436
 
 class GopherExceptionsTestCase(unittest.TestCase):
     def setUp(self):
-        self.stringfile = StringIO()
+        self.stringfile = BytesIO()
         self.config = testutil.getconfig()
         self.stringfile = testutil.getstringlogger()
         GopherExceptions.tracebacks = 0
@@ -41,8 +41,8 @@ class GopherExceptionsTestCase(unittest.TestCase):
                          "unknown-address [None/None] EXCEPTION OSError: foo\n")
 
     def testlog_proto_ip(self):
-        rfile = StringIO("/NONEXISTANT\n")
-        wfile = StringIO()
+        rfile = BytesIO("/NONEXISTANT\n")
+        wfile = BytesIO()
         handler = testutil.gettestinghandler(rfile, wfile, self.config)
         handler.handle()
         self.assertEqual(self.stringfile.getvalue(),

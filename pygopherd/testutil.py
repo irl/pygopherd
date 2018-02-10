@@ -22,7 +22,7 @@
 
 from pygopherd import initialization, logger
 from pygopherd.protocols import ProtocolMultiplexer
-from io import StringIO
+from io import BytesIO
 import os
 
 def getconfig():
@@ -34,7 +34,7 @@ def getstringlogger():
     config = getconfig()
     config.set('logger', 'logmethod', 'file')
     logger.init(config)
-    stringfile = StringIO()
+    stringfile = BytesIO()
     logger.setlogfile(stringfile)
     return stringfile
 
@@ -78,11 +78,11 @@ def gettestinghandler(rfile, wfile, config = None):
 def gettestingprotocol(request, config = None):
     config = config or getconfig()
 
-    rfile = StringIO(request)
+    rfile = BytesIO(request)
     # Pass fake rfile, wfile to gettestinghandler -- they'll be closed before
     # we can get the info, and some protocols need to read more from them.
     
-    handler = gettestinghandler(StringIO(), StringIO(), config)
+    handler = gettestinghandler(BytesIO(), BytesIO(), config)
     # Now override.
     handler.rfile = rfile
     return ProtocolMultiplexer.getProtocol(rfile.readline(),

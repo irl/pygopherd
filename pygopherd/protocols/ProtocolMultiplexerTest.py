@@ -1,5 +1,5 @@
 import unittest
-from io import StringIO
+from io import BytesIO
 from pygopherd.protocols import ProtocolMultiplexer
 from pygopherd import testutil
 import pygopherd.protocols
@@ -12,8 +12,8 @@ class ProtocolMultiplexerTestCase(unittest.TestCase):
     # sure we find the right one.
 
     def getproto(self, request):
-        rfile = StringIO(request)
-        wfile = StringIO()
+        rfile = BytesIO(request)
+        wfile = BytesIO()
         handler = testutil.gettestinghandler(rfile, wfile,
                                              self.config)
         return ProtocolMultiplexer.getProtocol(file.readline(),
