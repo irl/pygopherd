@@ -1,5 +1,5 @@
-productname = 'PyGopherd'
-versionstr = "2.0.18"
+productname = 'PyGopherd3k'
+versionstr = "0.0.1"
 
 versionlist = versionstr.split(".")
 major = versionlist[0]
@@ -9,7 +9,7 @@ copyright = "Copyright (C) 2002-2008 John Goerzen.  All rights reserved."
 author = "John Goerzen"
 author_email = "jgoerzen@complete.org"
 description = "Multiprotocol Internet Gopher Information Server"
-homepage = "http://www.quux.org/devel/gopher/pygopherd"
+homepage = "https://github.com/irl/pygopherd3k"
 homegopher = "gopher://quux.org/1/devel/gopher/pygopherd"
 license = """Copyright (C) 2002-2008 John Goerzen <jgoerzen@complete.org>
 
