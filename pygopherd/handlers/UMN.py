@@ -60,7 +60,8 @@ class UMNDirHandler(DirHandler):
             # Returns 1 if it didn't load from the cache.
             # Merge and sort.
             self.MergeLinkFiles()
-            self.fileentries.sort(self.entrycmp)
+            # TODO: Make this into a key function
+            #self.fileentries.sort(self.entrycmp)
         
     def prep_initfiles_canaddfile(self, ignorepatt, pattern, file):
         """Override the parent to process dotfiles and keep them out

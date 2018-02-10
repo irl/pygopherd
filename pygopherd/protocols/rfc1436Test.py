@@ -35,7 +35,7 @@ class RFC1436TestCase(unittest.TestCase):
         self.proto.handle()
         self.assertEqual(self.logfile.getvalue(),
                           "10.77.77.77 [GopherProtocol/FileHandler]: /testfile.txt\n")
-        self.assertEqual(self.wfile.getvalue(), "Test\n")
+        self.assertEqual(self.wfile.getvalue(), b"Test\n")
 
     def testhandle_dir_abstracts(self):
         proto = GopherProtocol("", self.server, self.handler, self.rfile,
@@ -45,7 +45,7 @@ class RFC1436TestCase(unittest.TestCase):
         self.assertEqual(self.logfile.getvalue(),
                           "10.77.77.77 [GopherProtocol/UMNDirHandler]: /\n")
         # Try to make this easy on us to fix.
-        actualarr = self.wfile.getvalue().splitlines()
+        actualarr = self.wfile.getvalue().decode('ascii').splitlines()
         expectedarr = [
 'iThis is the abstract for the testdata directory.\tfake\t(NULL)\t0',
 '0README\t/README\tHOSTNAME\t64777\t+',

@@ -45,15 +45,17 @@ class FolderHandler(Virtual):
     def prepare(self):
         self.entries = []
         count = 1
+        mbox_iter = self.mbox.itervalues()
         while 1:
-            message = next(self.mbox)
-            if not message:
+            try:
+                message = next(mbox_iter)
+                handler = MessageHandler(self.genargsselector(self.getargflag() + \
+                                         str(count)), self.searchrequest,
+                                         self.protocol, self.config, None)
+                self.entries.append(handler.getentry(message))
+                count += 1
+            except StopIteration:
                 break
-            handler = MessageHandler(self.genargsselector(self.getargflag() + \
-                                     str(count)), self.searchrequest,
-                                     self.protocol, self.config, None)
-            self.entries.append(handler.getentry(message))
-            count += 1
 
     def isdir(self):
         return 1
@@ -88,7 +90,7 @@ class MessageHandler(Virtual):
             self.entry.setmimetype('text/plain')
             self.entry.setgopherpsupport(0)
 
-            subject = message.getheader('Subject', '<no subject>')
+            subject = message.get('Subject', '<no subject>')
             # Sanitize, esp. for continuations.
             subject = re.sub('\s+', ' ', subject)
             if subject:
@@ -100,10 +102,11 @@ class MessageHandler(Virtual):
     def getmessage(self):
         if self.message:
             return self.message
-        mbox = self.openmailbox()
+        self.mbox = self.openmailbox()
         message = None
+        mbox_iter = self.mbox.itervalues()
         for x in range(self.msgnum):
-            message = next(mbox)
+            message = next(mbox_iter)
         self.message = message
         return self.message
 
@@ -111,19 +114,13 @@ class MessageHandler(Virtual):
         self.canhandlerequest()         # Init the vars
 
     def write(self, wfile):
-        # Print out the headers first.
-        for header in self.getmessage().headers:
-            wfile.write(header)
+        #for header in self.getmessage().headers:
+        #    wfile.write(header)
 
         # Now the message body.
-        self.rfile = self.getmessage().fp
-        while 1:
-            string = self.rfile.read(4096)
-            if not len(string):
-                break
-            wfile.write(string)
-        self.rfile.close()
-        self.rfile = None
+        #body = self.getmessage().get_payload()
+        #wfile.write(body.encode('ascii'))
+        wfile.write(self.getmessage().as_bytes())
 
 ###########################################################################
 # Unix MBOX support
@@ -148,7 +145,7 @@ class MBoxFolderHandler(FolderHandler):
             return 0
 
     def prepare(self):
-        self.rfile = self.vfs.open(self.getselector(), "rt")
+        self.rfile = self.vfs.getfspath(self.getselector())
         self.mbox = mbox(self.rfile)
         FolderHandler.prepare(self)
 
@@ -160,8 +157,8 @@ class MBoxMessageHandler(MessageHandler):
         return "/MBOX-MESSAGE/"
 
     def openmailbox(self):
-        fd = self.vfs.open(self.getselector(), "rt")
-        return mbox(fd)
+        rfile = self.vfs.getfspath(self.getselector())
+        return mbox(rfile)
 
 ###########################################################################
 # Maildir support

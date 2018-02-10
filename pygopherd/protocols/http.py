@@ -193,7 +193,7 @@ class HTTPProtocol(BaseGopherProtocol):
         <HTML><HEAD><TITLE>Selector Not Found</TITLE>
         <H1>Selector Not Found</H1>
         <TT>""")
-        response += cgi.escape(msg)
+        response += cgi.escape(str(msg))
         response += "</TT><HR>Pygopherd</BODY></HTML>\n"
         self.wfile.write(response.encode('ascii'))
 
