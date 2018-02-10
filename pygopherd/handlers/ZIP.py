@@ -17,7 +17,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import re, time, stat, unittest, os.path, struct, types, shelve, marshal
-from StringIO import StringIO
+from io import StringIO
 from pygopherd import zipfile
 
 class MarshalingShelf(shelve.Shelf):
@@ -35,8 +35,8 @@ class DbfilenameShelf(MarshalingShelf):
 def shelveopen(filename, flag='c'):
     return DbfilenameShelf(filename, flag)
 
-UNX_IFMT = 0170000L
-UNX_IFLNK = 0120000L
+UNX_IFMT = 0o170000
+UNX_IFLNK = 0o120000
 
 from pygopherd.handlers import base
 
@@ -121,7 +121,7 @@ class VFS_Zip(base.VFS_Real):
         if dir in self.entrycache:
             return self.entrycache[dir][file]
         elif dir in self.badcache:
-            raise KeyError, "Call for %s: directory %s non-existant" % (fspath, dir)
+            raise KeyError("Call for %s: directory %s non-existant" % (fspath, dir))
 
         workingdir = ''
         
@@ -129,7 +129,7 @@ class VFS_Zip(base.VFS_Real):
             # right now, directory holds the directory from the *last* iteration.
             directory = self.dircache[inode]
             if type(directory) != types.DictType:
-                raise KeyError, "Call for %s: couldn't find %s" % (fspath, item)
+                raise KeyError("Call for %s: couldn't find %s" % (fspath, item))
             self.entrycache[workingdir] = directory
             
             workingdir = os.path.join(workingdir, item)
@@ -138,7 +138,7 @@ class VFS_Zip(base.VFS_Real):
                 inode = directory[item]
             except KeyError:
                 self.badcache[workingdir] = 1
-                raise KeyError, "Call for %s: Couldn't find %s" % (fspath, item)
+                raise KeyError("Call for %s: Couldn't find %s" % (fspath, item))
         return inode
         
     def _cachedir(self):
@@ -217,7 +217,7 @@ class VFS_Zip(base.VFS_Real):
         return 0
 
     def unlink(self, selector):
-        raise NotImplementedError, "VFS_ZIP cannot unlink files."
+        raise NotImplementedError("VFS_ZIP cannot unlink files.")
 
     def _getfspathfinal(self, selector):
         # Strip off the filename part.
@@ -254,9 +254,9 @@ class VFS_Zip(base.VFS_Real):
         try:
             zi = self._getcacheentry(fspath)
         except KeyError:
-            raise OSError, "Entry %s does not exist in %s" %\
-                  (selector, self.zipfilename)
-        
+            raise OSError("Entry %s does not exist in %s" %
+                  (selector, self.zipfilename))
+
         if type(zi) == types.DictType:
             # It's a directory.
             return (16877,              # mode
@@ -316,9 +316,9 @@ class VFS_Zip(base.VFS_Real):
         try:
             item = self._getcacheentry(fspath)
         except KeyError:
-            raise IOError, "Request to open %s, which does not exist" % selector
+            raise IOError("Request to open %s, which does not exist" % selector)
         if type(item) == types.DictType:
-            raise IOError, "Request to open %s, which is a directory (%s)" % (selector, str(item))
+            raise IOError("Request to open %s, which is a directory (%s)" % (selector, str(item)))
 
         return self.zip.open_pos(item)
 
@@ -327,10 +327,10 @@ class VFS_Zip(base.VFS_Real):
         try:
             retobj = self._getcacheentry(fspath)
         except KeyError:
-            raise OSError, "listdir on %s (%s) failed: no such file or directory" % (selector, fspath)
+            raise OSError("listdir on %s (%s) failed: no such file or directory" % (selector, fspath))
 
         if type(retobj) != types.DictType:
-            raise OSError, "listdir on %s failed: that is a file, not a directory.  Got %s" % (selector, str(retobj))
+            raise OSError("listdir on %s failed: that is a file, not a directory.  Got %s" % (selector, str(retobj)))
 
         return retobj.keys()
 

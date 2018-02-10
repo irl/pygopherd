@@ -20,7 +20,7 @@
 # END OF COPYRIGHT #
 
 import unittest
-from StringIO import StringIO
+from io import StringIO
 from pygopherd import logger, initialization, GopherExceptions, testutil
 from pygopherd.GopherExceptions import FileNotFound
 from pygopherd.protocols import rfc1436
@@ -34,8 +34,8 @@ class GopherExceptionsTestCase(unittest.TestCase):
 
     def testlog_basic(self):
         try:
-            raise IOError, "foo"
-        except IOError, e:
+            raise IOError("foo")
+        except IOError as e:
             GopherExceptions.log(e)
         self.assertEqual(self.stringfile.getvalue(),
                          "unknown-address [None/None] EXCEPTION IOError: foo\n")
@@ -51,8 +51,8 @@ class GopherExceptionsTestCase(unittest.TestCase):
 
     def testFileNotFound(self):
         try:
-            raise FileNotFound, "TEST STRING"
-        except FileNotFound, e:
+            raise FileNotFound("TEST STRING")
+        except FileNotFound as e:
             self.assertEquals(str(e),
                               "'TEST STRING' does not exist")
 

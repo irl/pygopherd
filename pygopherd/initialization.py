@@ -17,10 +17,10 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # END OF COPYRIGHT #
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 # Import lots of stuff so it's here before chrooting.
-import socket, os, sys, SocketServer, re, stat, os.path, UserDict, tempfile
+import socket, os, sys, socketserver, re, stat, os.path, collections, tempfile
 import time, atexit, errno, struct
 
 from pygopherd import handlers, protocols, GopherExceptions, logger, sighandlers
@@ -36,7 +36,7 @@ import traceback
 
 def initconffile(conffile):
     if not (os.path.isfile(conffile) and os.access(conffile, os.R_OK)):
-        raise Exception, "Could NOT access config file %s\nPlease specify config file as a command-line argument\n" % conffile
+        raise Exception("Could NOT access config file %s\nPlease specify config file as a command-line argument\n" % conffile)
 
     config = ConfigParser()
     config.read(conffile)
@@ -57,7 +57,7 @@ def initmimetypes(config):
     if not mimetypesfiles:
         errmsg = "Could not find any mimetypes files; check mimetypes option in config."
         logger.log(errmsg)
-        raise Exception, errmsg
+        raise Exception(errmsg)
 
 
     configencoding = eval(config.get("pygopherd", "encoding"))
@@ -71,7 +71,7 @@ def initmimetypes(config):
 
     pygopherd.fileext.init()
 
-class GopherRequestHandler(SocketServer.StreamRequestHandler):
+class GopherRequestHandler(socketserver.StreamRequestHandler):
     def handle(self):
         request = self.rfile.readline()
 
@@ -80,7 +80,7 @@ class GopherRequestHandler(SocketServer.StreamRequestHandler):
                      self.server, self, self.rfile, self.wfile, self.server.config)
         try:
             protohandler.handle()
-        except socket.error, e:
+        except socket.error(e):
             if not (e[0] in [errno.ECONNRESET, errno.EPIPE]):
                 traceback.print_exc()
             GopherExceptions.log(sys.exc_info()[1], protohandler, None)
@@ -94,7 +94,7 @@ class GopherRequestHandler(SocketServer.StreamRequestHandler):
 def getserverobject(config):
     # Pick up the server type from the config.
 
-    servertype = eval("SocketServer." + config.get("pygopherd", "servertype"))
+    servertype = eval("socketserver." + config.get("pygopherd", "servertype"))
 
     class MyServer(servertype):
         allow_reuse_address = 1

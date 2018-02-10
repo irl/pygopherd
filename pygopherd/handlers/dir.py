@@ -17,13 +17,14 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import SocketServer
+import socketserver
 import re
 import os, stat, os.path, mimetypes, time
 from pygopherd import protocols, gopherentry, handlers
 from pygopherd.handlers import base
 from stat import *
-import cPickle
+# TODO: Use pickle instead of _pickle
+import _pickle as cPickle
 
 cachetime = None
 cachefile = None
