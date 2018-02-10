@@ -34,11 +34,11 @@ class GopherExceptionsTestCase(unittest.TestCase):
 
     def testlog_basic(self):
         try:
-            raise IOError("foo")
-        except IOError as e:
+            raise OSError("foo")
+        except OSError as e:
             GopherExceptions.log(e)
         self.assertEqual(self.stringfile.getvalue(),
-                         "unknown-address [None/None] EXCEPTION IOError: foo\n")
+                         "unknown-address [None/None] EXCEPTION OSError: foo\n")
 
     def testlog_proto_ip(self):
         rfile = StringIO("/NONEXISTANT\n")

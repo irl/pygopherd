@@ -143,13 +143,13 @@ class MBoxFolderHandler(FolderHandler):
             startline = fd.readline()
             fd.close()
             
-            return re.match(UnixMailbox._fromlinepattern, startline)
+            return re.match(mbox._fromlinepattern, startline)
         except IOError:
             return 0
 
     def prepare(self):
         self.rfile = self.vfs.open(self.getselector(), "rt")
-        self.mbox = UnixMailbox(self.rfile)
+        self.mbox = mbox(self.rfile)
         FolderHandler.prepare(self)
 
     def getargflag(self):
@@ -161,7 +161,7 @@ class MBoxMessageHandler(MessageHandler):
 
     def openmailbox(self):
         fd = self.vfs.open(self.getselector(), "rt")
-        return UnixMailbox(fd)
+        return mbox(fd)
 
 ###########################################################################
 # Maildir support

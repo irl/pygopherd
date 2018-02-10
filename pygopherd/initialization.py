@@ -80,7 +80,7 @@ class GopherRequestHandler(socketserver.StreamRequestHandler):
                      self.server, self, self.rfile, self.wfile, self.server.config)
         try:
             protohandler.handle()
-        except socket.error(e):
+        except socket.error as e:
             if not (e[0] in [errno.ECONNRESET, errno.EPIPE]):
                 traceback.print_exc()
             GopherExceptions.log(sys.exc_info()[1], protohandler, None)
@@ -105,7 +105,7 @@ def getserverobject(config):
 
             # Set a timeout.
             if config.has_option('pygopherd', 'timeout'):
-                mytimeout = struct.pack("ll", long(config.get('pygopherd', 'timeout')), 0)
+                mytimeout = struct.pack("ll", int(config.get('pygopherd', 'timeout')), 0)
                 self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO,
                                        mytimeout)
                 self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDTIMEO,

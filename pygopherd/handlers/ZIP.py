@@ -409,7 +409,7 @@ class DISABLED_TestVFS_Zip_huge:
 
 class TestVFS_Zip(unittest.TestCase):
     def setUp(s):
-        from ConfigParser import ConfigParser
+        from configparser import ConfigParser
         s.config = ConfigParser()
         s.config.add_section('pygopherd')
         s.config.set("pygopherd", "root", os.path.abspath('testdata'))

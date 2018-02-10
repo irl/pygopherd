@@ -175,7 +175,7 @@ class GopherEntry:
             vfs = VFS_Real(self.config)
 
         for extension, blockname in eaexts.items():
-            if self.ea.has_key(blockname):
+            if blockname in self.ea:
                 continue
             try:
                 rfile = vfs.open(selector + extension, "rt")

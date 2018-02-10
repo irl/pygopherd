@@ -37,7 +37,7 @@ class BaseGopherProtocol:
         config -- a ConfigParser object."""
 
         self.request = request
-        requestparts = map(lambda arg: arg.strip(), request.split("\t"))
+        requestparts = [arg.strip() for arg in request.split("\t")]
         self.rfile = rfile
         self.wfile = wfile
         self.config = config
