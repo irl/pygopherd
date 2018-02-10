@@ -41,7 +41,7 @@ class GopherExceptionsTestCase(unittest.TestCase):
                          "unknown-address [None/None] EXCEPTION OSError: foo\n")
 
     def testlog_proto_ip(self):
-        rfile = BytesIO("/NONEXISTANT\n")
+        rfile = BytesIO(b"/NONEXISTANT\n")
         wfile = BytesIO()
         handler = testutil.gettestinghandler(rfile, wfile, self.config)
         handler.handle()

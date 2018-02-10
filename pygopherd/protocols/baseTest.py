@@ -10,7 +10,7 @@ class BaseProtocolTestCase(unittest.TestCase):
         self.rfile = BytesIO(b"/testfile.txt\n")
         self.wfile = BytesIO()
         self.logfile = testutil.getstringlogger()
-        self.logstr =  "10.77.77.77 [BaseGopherProtocol/FileHandler]: /testfile.txt\n"
+        self.logstr =  b"10.77.77.77 [BaseGopherProtocol/FileHandler]: /testfile.txt\n"
         self.handler = testutil.gettestinghandler(self.rfile, self.wfile,
                                                   self.config)
         self.server = self.handler.server

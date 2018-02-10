@@ -85,7 +85,7 @@ def gettestingprotocol(request, config = None):
     handler = gettestinghandler(BytesIO(), BytesIO(), config)
     # Now override.
     handler.rfile = rfile
-    return ProtocolMultiplexer.getProtocol(rfile.readline(),
+    return ProtocolMultiplexer.getProtocol(rfile.readline().decode('ascii'),
                                            handler.server,
                                            handler,
                                            handler.rfile,

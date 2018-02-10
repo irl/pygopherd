@@ -9,7 +9,7 @@ syslogfunc = None
 
 def log_file(message):
     global logfile
-    logfile.write(message + "\n")
+    logfile.write(message.encode('ascii') + b"\n")
 
 def setlogfile(file):
     global logfile

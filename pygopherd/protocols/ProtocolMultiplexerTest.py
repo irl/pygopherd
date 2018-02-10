@@ -24,13 +24,13 @@ class ProtocolMultiplexerTestCase(unittest.TestCase):
                                                self.config)
 
     def testGoToGopher(self):
-        assert isinstance(testutil.gettestingprotocol("/gopher0-request.txt\n"), pygopherd.protocols.rfc1436.GopherProtocol)
+        assert isinstance(testutil.gettestingprotocol(b"/gopher0-request.txt\n"), pygopherd.protocols.rfc1436.GopherProtocol)
 
     def testGoToHTTP(self):
-        assert isinstance(testutil.gettestingprotocol("GET /http-request.txt HTTP/1.0\n\n"),
+        assert isinstance(testutil.gettestingprotocol(b"GET /http-request.txt HTTP/1.0\n\n"),
                           pygopherd.protocols.http.HTTPProtocol)
 
     def testGoToGopherPlus(self):
-        assert isinstance(testutil.gettestingprotocol("/gopher+-request.txt\t+\n"),
+        assert isinstance(testutil.gettestingprotocol(b"/gopher+-request.txt\t+\n"),
                           pygopherd.protocols.gopherp.GopherPlusProtocol)
     

@@ -34,7 +34,7 @@ class RFC1436TestCase(unittest.TestCase):
     def testhandle_file(self):
         self.proto.handle()
         self.assertEqual(self.logfile.getvalue(),
-                          "10.77.77.77 [GopherProtocol/FileHandler]: /testfile.txt\n")
+                          b"10.77.77.77 [GopherProtocol/FileHandler]: /testfile.txt\n")
         self.assertEqual(self.wfile.getvalue(), b"Test\n")
 
     def testhandle_dir_abstracts(self):
