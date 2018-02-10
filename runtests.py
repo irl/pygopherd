@@ -46,6 +46,5 @@ def suite():
     return suite
 
 if __name__ == '__main__':
-    profile.run("unittest.main(defaultTest='suite')", 'profile.out')
-#    unittest.main(defaultTest='suite')
+    unittest.main(defaultTest='suite')
 
