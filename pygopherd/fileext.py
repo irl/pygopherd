@@ -34,7 +34,7 @@ def extcmp(x, y):
 def extstrip(file, filetype):
     """Strips off the extension from file given type and returns the result.
     Returns file unmodified if no action is possible."""
-    if not (filetype and typemap.has_key(filetype)):
+    if not (filetype and filetype in typemap):
         return file
     for possible in typemap[filetype]:
         if file.endswith(possible):

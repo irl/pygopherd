@@ -1,5 +1,9 @@
-import unittest, os
-from pygopherd import pipe, testutil
+import os
+import tempfile
+import unittest
+
+from pygopherd import pipe
+from pygopherd import testutil
 
 class PipeTestCase(unittest.TestCase):
     def setUp(self):
@@ -9,7 +13,7 @@ class PipeTestCase(unittest.TestCase):
         self.testprog = self.root + "/pygopherd/pipetest.sh"
         
     def testWorkingPipe(self):
-        outputfd = os.tmpfile()
+        outputfd = tempfile.mkstemp()
         inputfd = open(self.testdata, "rt")
 
         retval = pipe.pipedata(self.testprog, [self.testprog],
@@ -17,13 +21,13 @@ class PipeTestCase(unittest.TestCase):
                       childstdout = outputfd)
         outputfd.seek(0)
 
-        self.assertEquals(outputfd.read(),
+        self.assertEqual(outputfd.read(),
                           "Starting\nGot [Word1]\nGot [Word2]\nGot [Word3]\nEnding\n")
-        self.assert_(os.WIFEXITED(retval), "WIFEXITED was not true")
-        self.assertEquals(os.WEXITSTATUS(retval), 0)
-        self.assertEquals(retval, 0)
+        self.assertTrue(os.WIFEXITED(retval), "WIFEXITED was not true")
+        self.assertEqual(os.WEXITSTATUS(retval), 0)
+        self.assertEqual(retval, 0)
         outputfd.close()
         
     def testFailingPipe(self):
-        outputfd = os.tmpfile()
+        outputfd = tempfile.mkstemp()
         

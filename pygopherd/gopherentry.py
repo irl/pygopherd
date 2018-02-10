@@ -18,7 +18,7 @@
 
 import socketserver
 import re
-import os, stat, os.path, mimetypes, urllib
+import os, stat, os.path, mimetypes, urllib.parse
 
 mapping = None
 eaexts = None
@@ -285,7 +285,7 @@ class GopherEntry:
             
         retval = 'gopher://%s:%d/' % (self.gethost(defaulthost),
                                       self.getport(defaultport))
-        retval += urllib.quote('%s%s' % (self.gettype(), self.getselector()))
+        retval += urllib.parse.quote('%s%s' % (self.gettype(), self.getselector()))
         return retval
 
     def getnum(self, default = None):

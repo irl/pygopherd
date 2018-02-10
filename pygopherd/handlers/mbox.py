@@ -142,8 +142,8 @@ class MBoxFolderHandler(FolderHandler):
             fd = self.vfs.open(self.getselector(), "rt")
             startline = fd.readline()
             fd.close()
-            
-            return re.match(mbox._fromlinepattern, startline)
+            fromlinepattern = 'From \\s*[^\\s]+\\s+\\w\\w\\w\\s+\\w\\w\\w\\s+\\d?\\d\\s+\\d?\\d:\\d\\d(:\\d\\d)?(\\s+[^\\s]+)?\\s+\\d\\d\\d\\d\\s*[^\\s]*\\s*$'
+            return re.match(fromlinepattern, startline)
         except IOError:
             return 0
 
