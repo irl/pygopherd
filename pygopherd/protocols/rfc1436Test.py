@@ -37,22 +37,6 @@ class RFC1436TestCase(unittest.TestCase):
                           "10.77.77.77 [GopherProtocol/FileHandler]: /testfile.txt\n")
         self.assertEqual(self.wfile.getvalue(), "Test\n")
 
-    def testhandle_file_zipped(self):
-        self.config.set("handlers.ZIP.ZIPHandler", "enabled", 'true')
-        from pygopherd.handlers import HandlerMultiplexer
-        HandlerMultiplexer.handlers = None
-        handlerlist = self.config.get("handlers.HandlerMultiplexer", "handlers")
-        handlerlist = handlerlist.strip()
-        handlerlist = handlerlist[0] + 'ZIP.ZIPHandler, ' + handlerlist[1:]
-        self.config.set("handlers.HandlerMultiplexer", "handlers", handlerlist)
-        self.proto = GopherProtocol("/testdata.zip/pygopherd/ziponly\n",
-                                    self.server,
-                                    self.handler, self.rfile, self.wfile,
-                                    self.config)
-        self.proto.handle()
-        self.assertEqual(self.wfile.getvalue(), "ZIPonly\n")
-        self.config.set("handlers.ZIP.ZIPHandler", "enabled", "false")
-
     def testhandle_dir_abstracts(self):
         proto = GopherProtocol("", self.server, self.handler, self.rfile,
                                self.wfile, self.config)
