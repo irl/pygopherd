@@ -2,6 +2,7 @@ README for Pygopherd for Python 3
 =================================
 
 [![Build Status](https://travis-ci.org/irl/pygopherd.svg?branch=master)](https://travis-ci.org/irl/pygopherd)
+[![Code Health](https://landscape.io/github/irl/pygopherd/master/landscape.svg?style=flat)](https://landscape.io/github/irl/pygopherd/master)
 
 This is a fork of Pygopherd. It's probably not useful to you.
 
