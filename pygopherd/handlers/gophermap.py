@@ -60,11 +60,11 @@ class BuckGophermapHandler(base.BaseHandler):
         selectorbase = self.selectorbase
         
         while 1:
-            line = self.rfile.readline()
+            line = self.rfile.readline().decode('ascii')
             if not line:
                 break
             if re.search("\t", line):   # gophermap link
-                args = map(lambda arg: arg.strip(), line.split("\t"))
+                args = [arg.strip() for arg in line.split("\t")]
 
                 if len(args) < 2 or not len(args[1]):
                     args[1] = args[0][1:] # Copy display string to selector

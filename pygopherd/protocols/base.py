@@ -56,9 +56,9 @@ class BaseGopherProtocol:
         """Normalize slashes in the selector.  Make sure it starts
         with a slash and does not end with one.  If it is a root directory
         request, make sure it is exactly '/'.  Returns result."""
-        if len(selector) and selector[-1] == b'/':
+        if len(selector) and selector[-1] == '/':
             selector = selector[0:-1]
-        if len(selector) == 0 or selector[0] != b'/':
+        if len(selector) == 0 or selector[0] != '/':
             selector = '/' + selector
         return selector
 
@@ -72,8 +72,8 @@ class BaseGopherProtocol:
         """Log a handled request."""
         logger.log("%s [%s/%s]: %s" % \
                    (self.requesthandler.client_address[0],
-                    re.search("[^.]+$", str(self.__class__)).group(0),
-                    re.search("[^.]+$", str(handler.__class__)).group(0),
+                    self.__class__.__name__,
+                    handler.__class__.__name__,
                     self.selector))
 
     def handle(self):
@@ -88,10 +88,10 @@ class BaseGopherProtocol:
             else:
                 handler.write(self.wfile)
         except GopherExceptions.FileNotFound as e:
-            self.filenotfound(str(e))
+            self.filenotfound(e.errno)
         except IOError as e:
             GopherExceptions.log(e, self, None)
-            self.filenotfound(e[1])
+            self.filenotfound(e.errno)
 
     def filenotfound(self, msg):
         self.wfile.write(("3%s\t\terror.host\t1\r\n" % msg).encode('utf-8'))
@@ -108,7 +108,7 @@ class BaseGopherProtocol:
 
         startstr = self.renderdirstart(entry)
         if startstr != None:
-            self.wfile.write(startstr)
+            self.wfile.write(startstr.encode('ascii'))
 
         abstractopt = self.config.get("pygopherd", "abstract_entries")
         doabstracts = abstractopt == 'always' or \
@@ -116,10 +116,10 @@ class BaseGopherProtocol:
                        not self.groksabstract())
 
         if self.config.getboolean("pygopherd", "abstract_headers"):
-            self.wfile.write(self.renderabstract(entry.getea('ABSTRACT', '')))
+            self.wfile.write(self.renderabstract(entry.getea('ABSTRACT', '')).encode('ascii'))
 
         for direntry in dirlist:
-            self.wfile.write(self.renderobjinfo(direntry))
+            self.wfile.write(self.renderobjinfo(direntry).encode('ascii'))
             if doabstracts:
                 abstract = self.renderabstract(direntry.getea('ABSTRACT'))
                 if abstract:
@@ -127,7 +127,7 @@ class BaseGopherProtocol:
 
         endstr = self.renderdirend(entry)
         if endstr != None:
-            self.wfile.write(endstr)
+            self.wfile.write(endstr.encode('ascii'))
 
     def renderabstract(self, abstractstring):
         if not abstractstring:

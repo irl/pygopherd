@@ -303,7 +303,7 @@ class GopherEntry:
         self.gopherpsupport = arg
 
     def getea(self, name, default = None):
-        if self.ea.has_key(name):
+        if name in self.ea:
             return self.ea[name]
         return default
 

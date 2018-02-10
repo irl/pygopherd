@@ -81,7 +81,7 @@ class GopherRequestHandler(socketserver.StreamRequestHandler):
         try:
             protohandler.handle()
         except socket.error as e:
-            if not (e[0] in [errno.ECONNRESET, errno.EPIPE]):
+            if not (e.errno in [errno.ECONNRESET, errno.EPIPE]):
                 traceback.print_exc()
             GopherExceptions.log(sys.exc_info()[1], protohandler, None)
         except:

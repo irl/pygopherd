@@ -40,7 +40,7 @@ def getHandler(selector, searchrequest, protocol, config, handlerlist = None,
     if handlerlist == None:
         handlerlist = handlers
 
-    # SECURITY: assert that our absolute path is within the absolute
+    # TODO: assert that our absolute path is within the absolute
     # path of the site root.
 
     #if not os.path.abspath(rootpath + '/' + selector). \

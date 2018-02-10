@@ -72,9 +72,9 @@ class HTTPProtocol(BaseGopherProtocol):
         if icon:
             iconname = icon.group(1)
             if iconname in icons:
-                self.wfile.write("HTTP/1.0 200 OK\r\n")
-                self.wfile.write("Last-Modified: Fri, 14 Dec 2001 21:19:47 GMT\r\n")
-                self.wfile.write("Content-Type: image/gif\r\n\r\n")
+                self.wfile.write(b"HTTP/1.0 200 OK\r\n")
+                self.wfile.write(b"Last-Modified: Fri, 14 Dec 2001 21:19:47 GMT\r\n")
+                self.wfile.write(b"Content-Type: image/gif\r\n\r\n")
                 if self.requestparts[0] == 'HEAD':
                     return
                 self.wfile.write(binascii.unhexlify(icons[iconname]))
@@ -85,24 +85,25 @@ class HTTPProtocol(BaseGopherProtocol):
             self.log(handler)
             self.entry = handler.getentry()
             handler.prepare()
-            self.wfile.write("HTTP/1.0 200 OK\r\n")
+            headers = "HTTP/1.0 200 OK\r\n"
             if self.entry.getmtime() != None:
                 gmtime = time.gmtime(self.entry.getmtime())
                 mtime = time.strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime)
-                self.wfile.write("Last-Modified: " + mtime + "\r\n")
+                headers += "Last-Modified: " + mtime + "\r\n"
             mimetype = self.entry.getmimetype()
             mimetype = self.adjustmimetype(mimetype)
-            self.wfile.write("Content-Type: " + mimetype + "\r\n\r\n")
+            headers += "Content-Type: " + mimetype + "\r\n\r\n"
+            self.wfile.write(headers.encode('ascii'))
             if self.requestparts[0] == 'GET':
                 if handler.isdir():
                     self.writedir(self.entry, handler.getdirlist())
                 else:
                     self.handlerwrite(self.wfile)
         except GopherExceptions.FileNotFound as e:
-            self.filenotfound(str(e))
+            self.filenotfound(e.errno)
         except IOError as e:
             GopherExceptions.log(e, self, None)
-            self.filenotfound(e[1])
+            self.filenotfound(e.errno)
 
     def handlerwrite(self, wfile):                                
         self.handler.write(wfile)
