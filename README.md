@@ -1,18 +1,15 @@
 README for Pygopherd for Python 3
 =================================
 
-[![Build Status](https://travis-ci.org/irl/pygopherd.svg?branch=master)](https://travis-ci.org/irl/pygopherd)
-[![Code Health](https://landscape.io/github/irl/pygopherd/master/landscape.svg?style=flat)](https://landscape.io/github/irl/pygopherd/master)
+[![Build Status](https://travis-ci.org/irl/pygopherd3k.svg?branch=master)](https://travis-ci.org/irl/pygopherd3k)
+[![Coverage Status](https://coveralls.io/repos/github/irl/pygopherd3k/badge.svg?branch=master)](https://coveralls.io/github/irl/pygopherd3k?branch=master)
+[![Code Health](https://landscape.io/github/irl/pygopherd3k/master/landscape.svg?style=flat)](https://landscape.io/github/irl/pygopherd3k/master)
 
-This is a fork of Pygopherd. It's probably not useful to you.
+This is a fork of [Pygopherd](https://github.com/jgoerzen/pygopherd). It is
+still experimental and there are probably still things that are broken.
 
-QUICKSTART (non-Debian)
------------------------
-
-1. Download and install Python 3.6 or above from your Linux distribution.
-
-You can run pygopherd either in-place (as a regular user account) or
-as a system-wide daemon.  For running in-place, do this:
+Try it out
+----------
 
 1. Modify conf/pygopherd.conf:
 
@@ -28,10 +25,3 @@ as a system-wide daemon.  For running in-place, do this:
 
 3. Invoke pygopherd by running:
    `PYTHONPATH=. ./bin/pygopherd`
-
-For installing: (but it's probably not a great idea)
-
-1. Run python3 setup.py install
-
-2. Make sure that the /etc/pygopherd/pygopherd.conf names valid users
-   (setuid, setgid) and valid document root (root).
