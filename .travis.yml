@@ -3,9 +3,10 @@ python:
   - "3.6"
   - "nightly"
 install:
-  - pip3 install coverage
-  - pip3 install python-coveralls
+  - pip install https://github.com/yaml/pyyaml/archive/master.zip
+  - pip install coverage
+  - pip install python-coveralls
 script:
-  - python3 -m coverage run runtests.py
+  - python -m coverage run runtests.py
 after_script:
   - coveralls
