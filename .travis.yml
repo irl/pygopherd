@@ -2,5 +2,10 @@ language: python
 python:
   - "3.6"
   - "nightly"
+install:
+  - pip3 install coverage
+  - pip3 install python-coveralls
 script:
-  - python3 runtests.py
+  - python3 -m coverage run runtests.py
+after_script:
+  - coveralls

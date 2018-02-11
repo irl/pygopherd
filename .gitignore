@@ -1,3 +1,4 @@
 *.pyc
 profile.out
 testdata/.cache.*
+.coverage
